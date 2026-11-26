@@ -1,0 +1,195 @@
+{
+  "policy_version": "development_dataset_1",
+  "created_at": "2026-11-22T08:10:00.583807+00:00",
+  "reviewer": "OpenAI Codex",
+  "review_type": "AI review of saved development inputs; no classifier or market outcomes",
+  "reservation_id": "nlp_eval_2023_v1",
+  "start": "2019-01-01",
+  "end_exclusive": "2023-01-01",
+  "expected_annotations": 150,
+  "primary_sources": [
+    "Financial Times; London (UK)",
+    "The Guardian"
+  ],
+  "batches": [
+    "proquest_dev_001",
+    "news_dev_001",
+    "news_dev_002",
+    "news_dev_003",
+    "news_dev_004",
+    "news_dev_005",
+    "news_dev_006"
+  ],
+  "quality_decisions": [
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2671105554",
+      "record_version_hash": "4497396a979a03a798b8964f7e97208ef994f2382ea1dfdb45dfb9b98d7cd1c5",
+      "body_hash": "e8eb571c5f67d376e7574844d568306e2103f2fd0f9e884e608fc8ec46cc342b",
+      "action": "remove_metadata_suffix",
+      "flags": [
+        "verified_metadata_suffix_removed"
+      ],
+      "reason": "Remove the verified terminal ProQuest subject-index metadata from derived text only; keep the reviewed original and its evidence offsets.",
+      "review_basis": "data/annotations/news_dev_001/annotations.jsonl",
+      "article_number": 6,
+      "suffix_start": 15879,
+      "original_length": 16001
+    },
+    {
+      "source": "The Guardian",
+      "document_id": "info/2025/apr/22/guardian-style-guide-o",
+      "record_version_hash": "84a73014ce3d7e91555a1c814496eca659c260e1be52331edc535b2fbad9833e",
+      "body_hash": "a62b40419aabcf265177f37620febb3352c9353c550c75f11c502817bea3c303",
+      "action": "exclude",
+      "flags": [
+        "non_news_reference_page",
+        "conflicting_publication_url_year"
+      ],
+      "reason": "Exclude an alphabetical style-reference page from primary modelling: its 2020 publication metadata conflicts with its 2025 identifier and 2026 revision. Preserve the draw and negative labels; do not infer historical availability.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 28
+    },
+    {
+      "source": "The Guardian",
+      "document_id": "world/2021/apr/01/suez-2-ever-given-grounding-prompts-plan-for-canal-along-egypt-israel-border",
+      "record_version_hash": "bbae1181b288d8b0c85a40514299208a5a329146e43a19daac1fe53331e062dd",
+      "body_hash": "bc356f4ef680639846990da7c08fb752816d084463729b9b92ed39b9d27b397b",
+      "action": "exclude",
+      "flags": [
+        "suspected_satire"
+      ],
+      "reason": "Conservatively exclude suspected fictional/satirical reporting from primary modelling, based on the saved 1 April article and internal wordplay. This is an AI genre inference, not external verification. Preserve the negative labels and original selection.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 35
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2449692572",
+      "record_version_hash": "2b108bc1284f49edcceb06b07ce7dea7d5708ea8c2c8c3a8b16cddecbd5120e4",
+      "body_hash": "6f0086ae80b0e7229140dedfdf0d79f4f7047ef317cb9a1965cd2dabd658b434",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_002/annotations.jsonl",
+      "article_number": 1
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2458832789",
+      "record_version_hash": "19ba77bc8707ef818e728b725af8b4583d706a54ac79d100e2daaf80364f9ce1",
+      "body_hash": "2432c11b0891a0a20b18f00d84d34ffcbc8bf2f90af91446b736b13b07cfce7c",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_002/annotations.jsonl",
+      "article_number": 2
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2313231000",
+      "record_version_hash": "1351b520fa8738c775e906330d3cf730ee0ee44e82abdb1990f31eb88a17ea44",
+      "body_hash": "713b74fdcbee6c822fc9d3353638f30fc35ac19147947b162989bdded6220138",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 7
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2228961491",
+      "record_version_hash": "8e04bee6e6204e607eca71792837b1c5d6c15bfec728dc72b622d5cb1f3c5d9e",
+      "body_hash": "fefb03a5fb9aedbd9369cffb6631ab6057a9c9ebb14e74c1f7a764d2c7bb2a85",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 20
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2361551830",
+      "record_version_hash": "e021ec0e336dfcf00fc0cba668a5149532e06aec89f1d6e7739bb5179086d957",
+      "body_hash": "6d453f44b1dac6a2acf9a2e5d3918cf84b21d2113752dd46bcb0199f12ba6eaa",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 27
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2614032092",
+      "record_version_hash": "89a8f600e89b419fe9eb3a6c9a9561dc19b0a491fabd3a7b762dcd2bfe802ec2",
+      "body_hash": "7caa2af160242f0d9bce54124057fde2d9bc97d397d99d0d7ae0df238c4c3e8c",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_004/annotations.jsonl",
+      "article_number": 31
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2303473463",
+      "record_version_hash": "eb9e4678d8af86541c4abf7df39943b5bc9c8c10100c193c3c9184b1b6334380",
+      "body_hash": "6c04d826d30176d364c208234b41e49f0da973bac4d212f45ee41a20e5ce451e",
+      "action": "retain_flagged",
+      "flags": [
+        "layout_artifacts_retained"
+      ],
+      "reason": "Retain readable reviewed text with an explicit extraction flag. Displaced phrases, joined/split words, repeated panels or apparent substitutions are not reconstructed without a verified source. Labels and evidence remain unchanged.",
+      "review_basis": "data/annotations/news_dev_006/annotations.jsonl",
+      "article_number": 2
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2243174234",
+      "record_version_hash": "b3f9af80efc0416a395d0c017289ccc53a8e6d3d75dcb9d972e7170ecc2a55b6",
+      "body_hash": "4b4c0f1867836fc0ed598b4249ae91952eb9c6829b91b1882cfcf9b95bfcf8b7",
+      "action": "retain_flagged",
+      "flags": [
+        "short_page_reference_summary"
+      ],
+      "reason": "Retain the saved summary as its own input; do not import text or evidence from the linked full story. Use the frozen related-report component to protect later validation splits.",
+      "review_basis": "data/annotations/news_dev_006/annotations.jsonl",
+      "article_number": 1
+    },
+    {
+      "source": "Financial Times; London (UK)",
+      "document_id": "2639881460",
+      "record_version_hash": "df9dab97eeff76ea4f90bbdded9e153251b55cb2c47eb7c9b0fbcc2a231aaaa7",
+      "body_hash": "808e2128577930773259b6c45cef3f245af9990864a4cc8125aff8cdf1ed3cad",
+      "action": "retain_flagged",
+      "flags": [
+        "short_page_reference_summary"
+      ],
+      "reason": "Retain the saved summary as its own input; do not import text or evidence from the linked full story. Use the frozen related-report component to protect later validation splits.",
+      "review_basis": "data/annotations/news_dev_006/annotations.jsonl",
+      "article_number": 20
+    }
+  ],
+  "limitations": [
+    "AI reference labels are not independently verified event truth.",
+    "Development sampling mixes targeted headlines and random draws; counts do not estimate corpus prevalence.",
+    "The ten specialist articles remain supplementary because their source coverage and publication timing differ from FT/Guardian.",
+    "Historical source versions and actual archive availability remain unverified; this is retrospective development.",
+    "Two genre/timing exclusions are modelling decisions; no frozen selection or annotation is changed.",
+    "Conservative related-report components may combine multiple events and do not establish statistical independence. Chronological development folds must purge overlapping components; no folds are assigned here.",
+    "All article evidence spans survive the sole metadata cleanup. They are not target-specific exhaustive evidence; no opening-text retention audit or truncation choice has yet been made.",
+    "Ambiguous layout fragments remain flagged; text is not reconstructed from external knowledge.",
+    "Known FT collection gaps remain accepted and flagged in the corpus audit."
+  ]
+}

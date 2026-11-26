@@ -1,0 +1,82 @@
+{
+  "version": "weekly_financial_dataset_1",
+  "output_directory": "data/processed/weekly_finance_v1",
+  "start": "2019-01-01",
+  "end": "2025-12-31",
+  "sources": [
+    "Financial Times; London (UK)",
+    "The Guardian"
+  ],
+  "primary_method": "keyword",
+  "primary_view": "combined",
+  "views": {
+    "combined": [
+      "Financial Times; London (UK)",
+      "The Guardian"
+    ],
+    "guardian": [
+      "The Guardian"
+    ],
+    "ft": [
+      "Financial Times; London (UK)"
+    ]
+  },
+  "timing": {
+    "publication": {
+      "news_delay_days": {
+        "Financial Times; London (UK)": 0,
+        "The Guardian": 0
+      },
+      "ovx_lag_weeks": 0
+    },
+    "conservative": {
+      "news_delay_days": {
+        "Financial Times; London (UK)": 30,
+        "The Guardian": 7
+      },
+      "ovx_lag_weeks": 1
+    }
+  },
+  "primary_timing": "publication",
+  "minimum_ovx_observations": 3,
+  "ovx_history_weeks": 4,
+  "splits": {
+    "training": [
+      "2019-01-01",
+      "2022-12-31"
+    ],
+    "validation": [
+      "2023-01-01",
+      "2023-12-31"
+    ],
+    "test": [
+      "2024-01-01",
+      "2025-12-31"
+    ]
+  },
+  "frozen_sha256": {
+    "data/experiments/nlp_dev_comparison_v1/manifest.json": "1652aee8b748e7323bccb00f5cbf85ded0f25ad682e29d9acb3dc5bafc1f4ac8",
+    "data/audit/nlp_input_v1/manifest.json": "913d3b8a4627f4259d5bc53264e3e37da089e47528488c0bea1431ab887a9d53",
+    "data/processed/nlp_dev_v1/manifest.json": "88a1e015e7e0e7d6b2ceb76b5b5cdcd32f0c25dec2a83afd7ede5192e3ab5f63",
+    "data/evaluation/nlp_eval_2023_v1/manifest.json": "d5f076bf0c7e8e83e2965c825fdadd6b88794213c6f3ea917b8ec491c6b6b9ff",
+    "data/processed/news_documents.jsonl": "812be3990ff6cf47d73e00c73b2755b755ed22d8abf90d785a9f0b651cbd2a1d",
+    "data/audit/ovx_summary.json": "33cdbfb9c64a7ea100b8282170eea7a99af88a2d4b9336ea8951e14a964a075c",
+    "data/raw/ovx_2019_2025.csv": "38e6948da0e0a5a9f3c452b3638439f207c520ac67368787973289bc48b2410c",
+    "data/audit/proquest_ft_collection.json": "71489d11117f71bd1d6df496833c330484805aafd81c54fc03ee5c01cd79dc2d",
+    "data/audit/guardian_retrieval.json": "78559971e24b40640e6c64b3a515be8d8b538c45e79dde06a2fe27c2e5225bba"
+  },
+  "input_policy": "Use frozen headline plus full model body. Apply only existing development quality exclusions/cleanup, bound to source/body/version; never substitute reference labels or tune from financial outcomes.",
+  "deduplication": "One exact body per source and effective week. Choose earliest effective publication timestamp, then document ID and record-version hash. Never union headlines or propagate predictions from later copies. Retain different sources and near families; record member disagreements.",
+  "cutoff": "Monday 00:00 UTC exclusive (end of preceding Sunday). Timestamped Guardian publication uses UTC; date-only FT assumes 23:59:59 UTC. Both are retrospective publication proxies, not verified availability.",
+  "news_features": "Relevant volume = log1p(relevant exact texts); threat/disruption shares divide by all eligible observed exact texts, not relevant texts or world news. Primary pools FT and Guardian counts; also export source-only sensitivities.",
+  "empty_policy": "Keep raw shares null at denominator zero. Model shares use zero by declared no-observed-news convention, with candidate_empty and completeness flags. Empty incomplete FT weeks mean no observed records, never verified zero coverage. Unknown Guardian collection or missing FT audit years makes features unavailable. Known FT annual gaps remain accepted.",
+  "market_policy": "Mean of finite positive recorded Monday-Friday OVX values, without imputation. Require a full in-range weekday window and at least three observations, including each of four history weeks. Preserve explicit blanks and absent weekdays; exchange closure status is unverified. Target is next-week observed OVX mean, not a verified complete exchange-session mean.",
+  "split_policy": "Assign by complete target Monday-Friday interval. Exclude targets crossing a split boundary or outside coverage. Store target-end/maturity dates for later expanding-window training; only targets ending before each forecast cutoff may enter fitting.",
+  "limitations": [
+    "Retrospective text versions and OVX availability/vintages are unverified; no real-time eligibility is claimed.",
+    "Conservative shifts are timing scenarios, not reconstructed archive availability.",
+    "FT gaps and archive restrictions remain; pooled source mix changes over time.",
+    "NLP disruption recall is weak; no model or rules change after evaluation.",
+    "No forecasts, financial scores, scaling or outcome-dependent feature selection in this step."
+  ]
+}

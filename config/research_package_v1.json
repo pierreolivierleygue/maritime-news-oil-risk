@@ -1,0 +1,24 @@
+{
+  "version": "research_package_1",
+  "date": "24 November 2026",
+  "sources": {
+    "weekly": {
+      "directory": "data/processed/weekly_finance_v1",
+      "manifest_sha256": "306123336db7edc38213245de410ac3dc02894135bbb5c1a54f2c64bf0d46365"
+    },
+    "nlp": {
+      "directory": "data/experiments/nlp_eval_2023_scoring_v1",
+      "manifest_sha256": "4dad670e5148f280bc2ab3d99f9b762fd1f939cb36a31f6edab43a6a361dee6c"
+    },
+    "finance": {
+      "directory": "data/experiments/financial_evaluation_v1",
+      "manifest_sha256": "87132520207a6424631d9718284ce789de1d0ac5fa506433416723b30c8dfc11"
+    }
+  },
+  "output_directory": "output/research",
+  "coverage_aggregation": "Sum counts over available full publication weeks by the quarter of their Monday. Divide summed event counts by summed candidate counts. Quarterly display only; forecasting still uses frozen weekly features.",
+  "presentation_slides": 6,
+  "presentation_minutes": 7,
+  "note_pages": 1,
+  "provenance": "Working annotations and implementation are AI-assisted; scope and research direction follow the project owner. No new fitting, scoring, model selection or article text export in this reporting layer."
+}

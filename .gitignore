@@ -1,0 +1,30 @@
+# Public research snapshot: ignore everything unless explicitly allowed below.
+# Data, notebooks, outputs, local reports, environments and credentials stay local.
+# Review new publication material before adding an exception. Do not use git add -f.
+*
+!/.gitignore
+!/README.md
+!/ANNOTATION_GUIDE.md
+!/.env.example
+!/pyproject.toml
+!/uv.lock
+!/requirements-reporting.txt
+
+!/scripts/
+!/scripts/*.py
+!/scripts/build_presentation.mjs
+!/tests/
+!/tests/test_*.py
+
+!/config/
+!/config/modelling_dataset_v1.json
+!/config/evidence_retention_v1.json
+!/config/nlp_comparison_v1.json
+!/config/nlp_evaluation_v1.json
+!/config/weekly_finance_v1.json
+!/config/financial_baselines_v1.json
+!/config/financial_news_v1.json
+!/config/financial_evaluation_v1.json
+!/config/financial_evaluation_v1.lock.json
+!/config/research_package_v1.json
+!/config/presentation_content_v1.json

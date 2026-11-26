@@ -1,0 +1,25 @@
+{
+  "protocol_version": "nlp_holdout_evaluation_1",
+  "reservation_id": "nlp_eval_2023_v1",
+  "development_experiment": "nlp_dev_comparison_v1",
+  "input_audit_id": "nlp_input_v1",
+  "output_directory": "data/experiments/nlp_eval_2023_scoring_v1",
+  "primary_method": "keyword",
+  "methods": ["keyword", "tfidf", "embedding"],
+  "targets": ["relevant", "threat", "disruption"],
+  "expected_articles": 120,
+  "expected_components": 31,
+  "expected_dominant_component_articles": 86,
+  "frozen_manifest_sha256": {
+    "data/experiments/nlp_dev_comparison_v1/manifest.json": "1652aee8b748e7323bccb00f5cbf85ded0f25ad682e29d9acb3dc5bafc1f4ac8",
+    "data/audit/nlp_input_v1/manifest.json": "913d3b8a4627f4259d5bc53264e3e37da089e47528488c0bea1431ab887a9d53",
+    "data/evaluation/nlp_eval_2023_v1/manifest.json": "d5f076bf0c7e8e83e2965c825fdadd6b88794213c6f3ea917b8ec491c6b6b9ff",
+    "data/evaluation/nlp_eval_2023_v1/labelling_v1/manifest.json": "d80aa6729257a0d800b536533f023affd2c00486d7c8bd338764add9350aebbb"
+  },
+  "inference": "Restore frozen safe-JSON parameters and fixed thresholds; no fitting, vocabulary updates, rule changes or representation selection. Build headline plus full saved body; commit all predictions before joining reference labels. Use the existing token-chunk and pooling functions unchanged.",
+  "metrics": "Per-target positive-class precision, recall, F1 and TP/FP/FN/TN, with resolved counts and unresolved targets excluded individually. Average positive-class F1 equally across the three targets. Use the same zero-division convention as development.",
+  "sensitivity": "Report all articles and, separately, omit the largest reserved related-report component, selected by article count with lexicographic group-ID tie-breaking. Also report each component, source and calendar quarter. These are descriptive sensitivities and never select a replacement primary method.",
+  "uncertainty": "No independence-based confidence intervals: one of 31 conservative related-report components contains 86 of 120 articles, and only three disruption positives remain outside it.",
+  "one_time_policy": "Refuse to overwrite a completed evaluation. Validation may reproduce exactly the same frozen predictions and metrics, but cannot change settings, refit on references, reinterpret the original reservation as unexposed, or create another primary-model selection.",
+  "financial_scope": "Do not load financial outcomes. Preserve the previously fixed 2023 financial validation and 2024-2025 financial test dates. No NLP tuning is permitted from these holdout results."
+}

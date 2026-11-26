@@ -1,0 +1,7 @@
+{
+  "version": "financial_evaluation_1",
+  "frozen_at_utc": "2026-11-23T16:16:11.014000+00:00",
+  "policy_sha256": "5166214d40830f57883449d1e7b07aeb106bfc90a272d29298a5d39b701c3c1d",
+  "final_test_forecasts_or_scores_computed": false,
+  "basis": "Prior frozen validation selections, existing dataset coverage counts, and an external event chronology; no final-test score inspection."
+}

@@ -1,0 +1,21 @@
+{
+  "policy_version": "evidence_retention_1",
+  "dataset_id": "nlp_dev_v1",
+  "expected_primary_articles": 138,
+  "expected_supplementary_articles": 10,
+  "candidate_body_word_limits": [0, 128, 256, 512, 768, 1024, 1536, 2048, null],
+  "word_definition": "Python Unicode regex \\S+ matches; whitespace-delimited words, not model tokens",
+  "prefix_rule": "Keep original body characters from offset zero through the last included word. If the whole body fits, retain it exactly, including trailing whitespace. Zero means headline only.",
+  "input_rule": "Unmodified title, then two newline characters and the retained body if nonempty; otherwise title alone. No rationale, labels, evidence selections, dates or metadata are predictor text.",
+  "selection": "Among positive finite tested word limits, choose the smallest retaining every recorded body evidence span on every primary article. If none passes, choose full body. Supplementary and excluded rows do not select the rule.",
+  "selection_target": "all_recorded_spans_on_all_primary_articles",
+  "metric_scope": "Exact body-offset retention. Headline semantics or repeated equivalent quotations elsewhere are not credited. Spans are article-level, not exhaustive or target-specific.",
+  "limitations": [
+    "Retention is an input-integrity diagnostic, not classifier accuracy or semantic validation.",
+    "Positive-target strata measure article-level spans among positive-labelled articles; they do not identify evidence for each target.",
+    "Negative annotations may rely on absence or whole-article context not captured by recorded excerpts.",
+    "Related-report components are dependent and sometimes broad; article percentages are descriptive, without independence-based intervals.",
+    "Word limits do not establish a tokenizer budget. A future embedding adapter must process all selected text using verified tokenizer-aware chunks and explicit pooling; silent truncation is not permitted.",
+    "No 2023 reference labels, classifier scores or financial outcomes select this rule. Historical text versions remain unverified."
+  ]
+}

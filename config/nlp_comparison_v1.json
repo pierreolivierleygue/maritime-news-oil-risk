@@ -1,0 +1,38 @@
+{
+  "protocol_version": "nlp_development_comparison_1",
+  "dataset_id": "nlp_dev_v1",
+  "input_audit_id": "nlp_input_v1",
+  "validation_years": [2020, 2021, 2022],
+  "targets": ["relevant", "threat", "disruption"],
+  "methods": ["keyword", "tfidf", "embedding"],
+  "seed": 20261122,
+  "minimum_class_count": 5,
+  "small_class_policy": "Use fixed keyword predictions for a target/fold if either resolved training class has fewer than five articles; record fallback separately. Do not weaken related-report protection.",
+  "c_grid": [0.1, 1.0, 10.0],
+  "threshold_grid": [0.35, 0.5, 0.65],
+  "selection": "Maximise pooled out-of-fold positive-class F1 averaged equally over the three targets. Use one C and one threshold shared across targets per representation. Include explicit rule fallbacks in the operational comparison. Ties prefer keyword, then TF-IDF, then embeddings; within a learned method prefer smaller C, then threshold closest to 0.5, then smaller threshold. These are development selection scores, not untouched test performance.",
+  "event_constraint": "Threat and disruption predictions require predicted relevance; probabilities remain raw, and only binary predictions are gated.",
+  "tfidf": {"ngram_range": [1, 2], "min_df": 1, "max_features": 10000, "sublinear_tf": true, "lowercase": true, "norm": "l2"},
+  "logistic": {"solver": "liblinear", "class_weight": "balanced", "max_iter": 2000, "tol": 0.000001},
+  "embedding": {
+    "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "model_directory": "data/models/minilm_l6_v2",
+    "max_sequence_tokens": 256,
+    "chunking": "Tokenize the complete fixed input once without truncation. Partition all content token IDs into non-overlapping consecutive chunks allowing space for tokenizer special tokens. Pass IDs directly to the frozen SentenceTransformer, without decode/re-tokenize.",
+    "pooling": "L2-normalize each chunk embedding, mean weighted by content-token count, then L2-normalize the article vector.",
+    "batch_size": 16,
+    "device": "cpu",
+    "torch_threads": 2,
+    "dimension": 384
+  },
+  "keyword": {
+    "version": "maritime_labels_1",
+    "window_characters": 700,
+    "geography": "\\bhormuz\\b|\\bred\\s+sea\\b|\\bbab[\\s-]+(?:el|al)[\\s-]+mand(?:eb|ab)\\b",
+    "transport": "\\b(?:ship\\w*|tanker\\w*|vessel\\w*|maritime|cargo|route\\w*|strait\\w*|port\\w*|passage|pipeline\\w*|terminal\\w*)\\b",
+    "security": "\\b(?:attack\\w*|seiz\\w*|seized|detain\\w*|detention|hijack\\w*|pirac\\w*|pirate\\w*|threat\\w*|blockad\\w*|missile\\w*|drone\\w*|houthi\\w*|security|escort\\w*|naval|war|conflict\\w*|military|sanction\\w*)\\b",
+    "threat": "\\b(?:threat\\w*|risk\\w*|warn\\w*|could|may|might|fear\\w*|attack\\w*|missile\\w*|drone\\w*|pirac\\w*|pirate\\w*|escort\\w*|protect\\w*)\\b",
+    "disruption": "\\b(?:seized|seizure\\w*|detained|detention\\w*|hijacked|blocked|closed|suspended|suspension\\w*|halted|diverted|rerouted|non[ -]operational|evacuated|evacuation\\w*)\\b",
+    "scope": "Require geography, transport and security terms within one 700-character window. Threat/disruption terms must occur in such a window. A lexical baseline, not an implementation of full semantic annotation rules; it can mistake hypothetical, negated, historical or background reporting for current events. Frozen before scoring."
+  }
+}

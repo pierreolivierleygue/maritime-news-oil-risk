@@ -1,0 +1,42 @@
+{
+  "title": "Maritime news and oil-market uncertainty",
+  "date": "24 November 2026",
+  "slides": [
+    {
+      "title": "Can maritime news improve oil-risk forecasts?",
+      "seconds": 50,
+      "notes": "My motivation comes from combining mathematics applied to social sciences with geopolitics, and from my Marine Nationale internship. The research question is whether news about maritime supply routes helps forecast oil-market uncertainty. I distinguish a threat from evidence that shipping or infrastructure operations actually stopped. These categories can overlap. The proposed mechanism is that threats might change expectations before a disruption occurs. That is a hypothesis, not an established causal effect. The contribution is a small, transparent maritime application with two separate tests: whether the text method measures the categories consistently, and whether the resulting indicators improve next-week forecasts. A successful classifier need not produce a useful financial predictor.",
+      "sources": ["PROJECT_REQUIREMENTS.md: purpose, motivation and research scope", "PROJECT_ROADMAP.md: hypothesis and E1-E4"]
+    },
+    {
+      "title": "Coverage and timing constrain the experiment",
+      "seconds": 70,
+      "notes": "The frozen primary corpus contains 1,549 classified Financial Times and Guardian articles. The chart counts observed exact texts after within-source, within-week deduplication. It groups weeks into quarters only to make the presentation readable. The forecasting models use weekly inputs. The lower chart divides event counts by all candidate texts, not just relevant stories or all world news. A story can contribute to both event categories. Known FT gaps remain in 2019, 2020 and 2024. Zero observed news does not prove zero coverage. At the end of Sunday, the model forecasts the following Monday-to-Friday observed OVX mean. OVX measures options-implied uncertainty associated with USO. It is not realized Brent volatility. Original article versions and historical availability are unverified, which makes this a retrospective study. Training covers 2019-2022, validation 2023, and final testing 2024-2025.",
+      "sources": ["WEEKLY_FINANCE_DATASET.md", "data/processed/weekly_finance_v1/summary.json", "data/processed/weekly_finance_v1/weekly_news.jsonl", "PROJECT_ROADMAP.md: OVX definition"]
+    },
+    {
+      "title": "Keyword rules lead, but disruption recall is weak",
+      "seconds": 85,
+      "notes": "The NLP comparison uses three representations. Keyword rules detect explicit language. TF-IDF represents lexical importance, followed by regularised logistic regression. Frozen MiniLM sentence embeddings represent semantic similarity, also followed by logistic regression. The encoder is reused, not trained in this project. Headline plus full cleaned body is the frozen input, with chunking to avoid silent truncation for embeddings. Chronological development folds selected the keyword method before the reserved 2023 evaluation. On 120 held-out articles, its mean positive-class F1 is 0.803. This averages relevance, threat and disruption F1 equally. It measures agreement with AI-reviewed references, not independent event truth. One related-report component contains 86 articles. Removing it reduces keyword mean F1 to 0.584. All methods then miss the three remaining disruption positives. This is the main measurement weakness, and I did not repair thresholds after viewing held-out or financial results.",
+      "sources": ["NLP_COMPARISON.md", "NLP_EVALUATION.md", "EVIDENCE_RETENTION.md", "data/experiments/nlp_eval_2023_scoring_v1/summary.json"]
+    },
+    {
+      "title": "Four nested models test incremental information",
+      "seconds": 85,
+      "notes": "M0 predicts the latest available weekly OVX mean. M1 adds a fitted market-history equation using current OVX and its trailing four-week mean. M2 adds V, the logarithm of one plus the number of relevant observed texts. M3 adds T and D, the threat and disruption shares. The main comparison is M3 versus M2 because it isolates the contribution of distinguishing event categories beyond the amount of news. Ridge minimises squared training errors plus alpha times squared coefficients, leaving the intercept unpenalised. Predictors are standardised within each available training window and the target remains unscaled. Validation independently selected alpha 0.01 for all three regressions. Each final forecast refits on an expanding window using only outcomes available before that cutoff. Earlier test outcomes enter later fits only after maturing. In the conservative timing scenario, both market predictors and training-target availability move back by one week. This prevents the model from learning an outcome that the timing assumption says was unavailable.",
+      "sources": ["FINANCIAL_BASELINES.md", "FINANCIAL_NEWS_MODELS.md", "FINANCIAL_EVALUATION.md", "config/financial_evaluation_v1.json"]
+    },
+    {
+      "title": "The final-test gain is small and uncertain",
+      "seconds": 80,
+      "notes": "All four models are evaluated on the same 104 target weeks. M3 has the lowest MAE at 2.6861 OVX points, compared with 2.7469 for M2 and 2.8118 for persistence. The primary incremental gain is 2.2 percent. The uncertainty interval is more important than the ranking: the paired M3-minus-M2 MAE difference is minus 0.0608, with a 95 percent interval from minus 0.1490 to plus 0.0227. It includes zero. The bootstrap resamples contiguous four-week blocks of paired errors over 10,000 draws. Two- and eight-week alternatives also include zero. M2 and M3 have almost identical aggregate RMSE, so the extra features do little for large misses overall. The news extensions had worsened 2023 validation MAE, which cautions against a stable improvement claim. The final test is now exposed and cannot support further outcome-guided tuning as untouched evidence.",
+      "sources": ["FINANCIAL_EVALUATION.md", "FINANCIAL_NEWS_MODELS.md", "data/experiments/financial_evaluation_v1/summary.json"]
+    },
+    {
+      "title": "Stronger measurement and new data come next",
+      "seconds": 50,
+      "notes": "The conclusion is cautious. This fixed news measure produces a modest final-period MAE gain, but the primary interval includes zero. Source and timing checks give mixed support: conservative FT-only M3 slightly worsens MAE relative to M2. Excluding the predefined early Red Sea window preserves a small MAE gain but worsens RMSE. Remaining limitations include incomplete coverage, retrospective article and market vintages, AI reference labels, weak disruption recall and few independent episodes. A sensible next experiment would improve independently reviewed disruption labels, freeze a revised method, and evaluate it on genuinely new observations. This project demonstrates a reproducible research process rather than a trading strategy or causal estimate. Scope and research direction belong to the project owner; the working annotations, implementation and reporting were AI-assisted. Personal attribution should describe those roles accurately.",
+      "sources": ["FINANCIAL_EVALUATION.md: robustness and interpretation", "PROJECT_REQUIREMENTS.md: attribution and acceptance criteria"]
+    }
+  ]
+}

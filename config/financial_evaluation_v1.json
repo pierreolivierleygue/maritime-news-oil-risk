@@ -1,0 +1,189 @@
+{
+  "version": "financial_evaluation_1",
+  "dataset_directory": "data/processed/weekly_finance_v1",
+  "dataset_manifest_sha256": "306123336db7edc38213245de410ac3dc02894135bbb5c1a54f2c64bf0d46365",
+  "baseline_directory": "data/experiments/financial_baselines_v1",
+  "baseline_manifest_sha256": "b8fa9eb502d1c484b8f1466e16ea20881893fc62456a1f98218545d1b65ad4ba",
+  "news_directory": "data/experiments/financial_news_v1",
+  "news_manifest_sha256": "b8a2acfc4538de45fad5396ad97bb3ceefdf3ee7469aad40732aae9925f6457e",
+  "output_directory": "data/experiments/financial_evaluation_v1",
+  "splits": {
+    "training": [
+      "2019-01-01",
+      "2022-12-31"
+    ],
+    "validation": [
+      "2023-01-01",
+      "2023-12-31"
+    ],
+    "test": [
+      "2024-01-01",
+      "2025-12-31"
+    ]
+  },
+  "model_features": {
+    "M1": [
+      "ovx_latest",
+      "ovx_trailing_four_week_mean"
+    ],
+    "M2": [
+      "ovx_latest",
+      "ovx_trailing_four_week_mean",
+      "news_volume"
+    ],
+    "M3": [
+      "ovx_latest",
+      "ovx_trailing_four_week_mean",
+      "news_volume",
+      "threat_share",
+      "disruption_share"
+    ]
+  },
+  "selected_alphas": {
+    "M1": 0.01,
+    "M2": 0.01,
+    "M3": 0.01
+  },
+  "ridge": {
+    "solver": "svd",
+    "fit_intercept": true
+  },
+  "minimum_training_rows": 52,
+  "primary_panel": "publication/combined",
+  "panels": {
+    "publication/combined": {
+      "timing": "publication",
+      "view": "combined",
+      "ovx_lag_weeks": 0,
+      "target_availability_delay_days": 0,
+      "expected_rows": {
+        "training": 204,
+        "validation": 52,
+        "test": 104
+      }
+    },
+    "publication/guardian": {
+      "timing": "publication",
+      "view": "guardian",
+      "ovx_lag_weeks": 0,
+      "target_availability_delay_days": 0,
+      "expected_rows": {
+        "training": 204,
+        "validation": 52,
+        "test": 104
+      }
+    },
+    "publication/ft": {
+      "timing": "publication",
+      "view": "ft",
+      "ovx_lag_weeks": 0,
+      "target_availability_delay_days": 0,
+      "expected_rows": {
+        "training": 204,
+        "validation": 52,
+        "test": 104
+      }
+    },
+    "conservative/combined": {
+      "timing": "conservative",
+      "view": "combined",
+      "ovx_lag_weeks": 1,
+      "target_availability_delay_days": 7,
+      "expected_rows": {
+        "training": 203,
+        "validation": 52,
+        "test": 104
+      }
+    },
+    "conservative/guardian": {
+      "timing": "conservative",
+      "view": "guardian",
+      "ovx_lag_weeks": 1,
+      "target_availability_delay_days": 7,
+      "expected_rows": {
+        "training": 203,
+        "validation": 52,
+        "test": 104
+      }
+    },
+    "conservative/ft": {
+      "timing": "conservative",
+      "view": "ft",
+      "ovx_lag_weeks": 1,
+      "target_availability_delay_days": 7,
+      "expected_rows": {
+        "training": 203,
+        "validation": 52,
+        "test": 104
+      }
+    }
+  },
+  "models": {
+    "M0": "Latest OVX available under each timing scenario (one-week-old weekly mean in conservative timing).",
+    "M1": "Intercept plus ridge on latest available OVX and its trailing four-week mean.",
+    "M2": "M1 plus log1p relevant observed exact-text news count.",
+    "M3": "M2 plus threat and disruption shares of all observed candidates."
+  },
+  "forecast_policy": "Expanding window; refit training-only StandardScaler and fixed-alpha SVD ridge at each test origin. Target end and target maturity plus the panel availability delay must be strictly before the cutoff. Earlier test outcomes may enter later fits only once available. No target scaling, clipping, hyperparameter search or feature selection. All four models are retained.",
+  "panel_policy": "Refit each frozen feature/timing variant on its own eligible historical rows; use the primary validation-selected alphas for every panel, without retuning. Score all panels on the intersection of eligible test target weeks and export omitted dates. Report every panel; never choose a preferred variant from final scores.",
+  "conservative_timing": "Existing dataset delays FT news 30 days, Guardian news 7 days and market features one week. Also delay training-target maturity seven days to avoid using outcomes unavailable under this timing scenario. These are timing scenarios, not verified historical release dates.",
+  "metrics": {
+    "primary": "MAE",
+    "secondary": "RMSE",
+    "primary_comparison": [
+      "M3",
+      "M2"
+    ],
+    "other_comparisons": [
+      [
+        "M2",
+        "M1"
+      ],
+      [
+        "M1",
+        "M0"
+      ],
+      [
+        "M2",
+        "M0"
+      ],
+      [
+        "M3",
+        "M0"
+      ]
+    ],
+    "difference_sign": "augmented minus reference; negative favours augmented"
+  },
+  "bootstrap": {
+    "method": "paired non-circular moving-block percentile bootstrap of fixed forecast loss differences",
+    "replicates": 10000,
+    "seed": 20261123,
+    "confidence": 0.95,
+    "primary_block_weeks": 4,
+    "sensitivity_block_weeks": [
+      2,
+      8
+    ],
+    "development_validation_weeks": 52,
+    "block_rule": "ceil(52 ** (1/3)) = 4 using development/validation sample size only; heuristic, not an estimated optimum. Fixed half/double lengths 2 and 8 are reported regardless of results.",
+    "resampling": "Sample contiguous calendar blocks with replacement, concatenate and truncate to n paired errors; never form blocks across missing weeks. Same paired indices for MAE and squared-error vectors; recompute RMSE difference per draw. Quantiles use the linear method.",
+    "scope": "Only full-period primary-panel M3-minus-M2 has intervals. Source, timing, calendar and crisis sensitivities are descriptive, with no multiple-comparison significance claim.",
+    "limitations": "Intervals condition on fitted forecasts and the observed regimes, with no model refitting in bootstrap; stationarity and representative crisis episodes are uncertain. Not a guarantee of future generalisation or a causal test."
+  },
+  "crisis_exclusion": {
+    "name": "early_red_sea_window",
+    "start": "2023-11-01",
+    "end": "2024-06-30",
+    "rule": "Exclude primary-panel test target weeks whose Monday-Friday interval overlaps this calendar window. Keep fits and all matured training outcomes unchanged. Evaluation-only sensitivity, not removal of the event from model learning.",
+    "rationale": "UNCTAD documents Red Sea escalation since November 2023. The first-half-2024 endpoint is an analyst-fixed calendar convention before test scoring, not an inferred crisis end or a window selected from final outcomes. No claim that this is the empirically largest OVX episode.",
+    "source": "https://unctad.org/publication/navigating-troubled-waters-impact-global-trade-disruption-shipping-routes-red-sea-black"
+  },
+  "diagnostics": "Report all test years and quarters for the primary panel, all largest errors and cumulative paired absolute-error differences. Do not reinterpret large errors as externally established event causes.",
+  "limitations": [
+    "Retrospective text versions, OVX vintages and availability are unverified; conservative delays are scenarios, not demonstrated real-time access.",
+    "FT coverage gaps, source composition shifts and weak NLP disruption recall persist; AI reference agreement is not independent measurement validation.",
+    "The target is next-week mean of observed OVX with at least three observations; exchange-calendar completeness remains unverified.",
+    "Two dependent test years and few crisis episodes limit uncertainty estimates and generalisation. No causal or tradability claim.",
+    "Final-test scores become exposed in this run; any subsequent outcome-guided changes require a new evaluation design and cannot reuse this period as untouched."
+  ]
+}
